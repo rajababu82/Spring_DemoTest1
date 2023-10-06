@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Registration</title>
+</head>
+<body>
+    <h2>User Registration</h2>
+    <form id="userForm">
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" required><br><br>
+
+        <label for="middleName">Middle Name:</label>
+        <input type="text" id="middleName"><br><br>
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" required><br><br>
+
+        <button type="button" onclick="generatePassword()">Register</button>
+    </form>
+
+    <div id="output"></div>
+
+    <script>
+        function generatePassword() {
+            const firstName = document.getElementById("firstName").value;
+            const middleName = document.getElementById("middleName").value;
+            const lastName = document.getElementById("lastName").value;
+            const randomDigits = Math.floor(100 + Math.random() * 900);
+            const password = `${firstName.substring(0, 2)}${middleName.substring(0, 2)}${lastName.substring(0, 2)}${randomDigits}`;
+            document.getElementById("output").innerHTML = `Generated Password: ${password}`;
+            const user = { firstName, middleName, lastName, password };
+            fetch('http://localhost:8080/api/user/saveUser', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(user) })
+            .then(response => response.json())
+            .then(data => { console.log('User data saved:', data); })
+            .catch(error => { console.error('Error saving user data:', error); });
+        }
+    </script>
+</body>
+</html>
